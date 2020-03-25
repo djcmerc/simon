@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<link rel="stylesheet" type="text/css" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<audio id="up-sound">
+    <source src="sounds/upsound.wav"></source>
+</audio>
+<audio id="down-sound">
+    <source src="sounds/downsound.wav"></source>
+</audio>
+<audio id="left-sound">
+    <source src="sounds/leftsound.wav"></source>
+</audio>
+<audio id="right-sound">
+    <source src="sounds/rightsound.wav"></source>
+</audio>
+<html>
+    <head>
+        <title>Simon</title>
+    </head>
+
+    <body>
+        <div id="game-title">
+            <h1>Simon</h1>
+        </div>
+        <div id="game-area">
+            <div id="button-row">
+                <button id="start-button" class="buttons" type="button">Start</button>
+                <button id="reset-button" class="buttons" type="button">Reset</button>
+            </div>
+            <br/>
+            <br/>
+            <div id="game-container">
+                <div id="triangle-up"></div>
+                <div id="middle-row">
+                    <div id="triangle-left"></div>
+                    <div id="triangle-right"></div>
+                </div>
+                <div id="triangle-down"></div>
+            </div>
+            <br/>
+            <br/>
+            <div id="info-container">
+                <div id="turn">
+                    <h3>Turn:</h3> 
+                </div>
+                <br/>
+                <div class="info-rows">
+                    <div class="game-info">
+                        <h3>Level: 1</h3>
+                    </div>
+                    <div class="game-info">
+                        <h3>Score: 0</h3>
+                    </div>
+                </div>
+                <br/>
+                <div class="info-rows">
+                    <div class="game-info">
+                        <h3>Lives: 3</h3>
+                    </div>
+                    <div class="game-info">
+                        <h3>Presses: 4</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="simongame.js"></script>
+    </body>
+</html>

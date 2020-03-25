@@ -1,0 +1,82 @@
+body{
+    margin: 0;
+}
+#button-row{
+    text-align: center;
+    padding-top: 30px;
+}
+.buttons{
+    margin: 0 25px;
+}
+#game-area{
+    background-image: url(https://storage.pixteller.com/designs/designs-images/2019-03-27/05/simple-background-backgrounds-passion-simple-1-5c9b95d2d9f93.png);
+    margin: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: calc(100vh - 100px);
+}
+.game-info{
+    margin: 0 50px;
+}
+#game-title{
+    background-image: url(https://venngage-wordpress.s3.amazonaws.com/uploads/2018/09/Simple-White-Pattern-Background-Image.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    text-align: center;
+    line-height: 100px;
+    height: 100px;
+}
+#game-title h1{
+    margin: 0;
+}
+#info-container{
+    text-align: center;
+    margin: 0;
+}
+.info-rows{
+    display: flex;
+    justify-content: center;
+}
+#middle-row{
+    display: flex;
+    height: 200px;
+    width: 650px;
+    margin: 0 auto;
+    align-items: center;
+}
+#triangle-up{
+    width: 0;
+	height: 0;
+	border-left: 50px solid transparent;
+	border-right: 50px solid transparent;
+    border-bottom: 100px solid blue;
+    display: block;
+    margin: 0 auto;
+}
+#triangle-right{
+    width: 0;
+	height: 0;
+	border-top: 50px solid transparent;
+	border-left: 100px solid green;
+    border-bottom: 50px solid transparent;
+    display: block;
+    margin: 0 auto;
+}
+#triangle-down{
+    width: 0;
+	height: 0;
+	border-left: 50px solid transparent;
+	border-right: 50px solid transparent;
+    border-top: 100px solid red;
+    display: block;
+    margin: 0 auto;
+}
+#triangle-left{
+    width: 0;
+	height: 0;
+	border-top: 50px solid transparent;
+	border-right: 100px solid yellow;
+    border-bottom: 50px solid transparent;
+    display: block;
+    margin: 0 auto;
+}
