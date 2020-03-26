@@ -10,15 +10,19 @@ var startButton = document.getElementById('start-button');
 var resetButton = document.getElementById('reset-button');
 var gameStart = false;
 var level = 1;
-var lives = 1;
+var lives = 3;
 var score = 0;
 var playerTurn = false;
 var playerInput = [];
 var compInput = [];
 var numInputs = 4;
 var playerPresses = 0;
-var gameSpeed = 750;
+var gameSpeed = 925;
+var onStreak = false;
+var streakNum = 0;
+var scoreMultiplier = 1.0;
 
+// Starts the game on button click if the game has not started
 startButton.addEventListener("click", function(){
     if (gameStart == false) 
     {
@@ -27,44 +31,54 @@ startButton.addEventListener("click", function(){
     }
 });
 
+// Resets game to original state on button click
 resetButton.addEventListener("click", function(){
-    reset();
+    resetGameConditions();
+    resetInformation();
 });
 
+// Listeners to handle arrows clicks on player turn
 blue.addEventListener("click", function(){
-    if (playerTurn)clickColor(0)});
+    if (playerTurn)colorHandler(0)});
 green.addEventListener("click", function(){
-    if (playerTurn) clickColor(1)});
+    if (playerTurn) colorHandler(1)});
 yellow.addEventListener("click", function(){
-    if (playerTurn) clickColor(2)});
+    if (playerTurn) colorHandler(2)});
 red.addEventListener("click", function(){
-    if (playerTurn) clickColor(3)});
+    if (playerTurn) colorHandler(3)});
 
+// Game logic
 function game(){
-    playerPresses = 0;
-    if (playerTurn == false)
+    if (gameStart == true)
     {
-        compInput = new Array(numInputs);
-        playerInput = new Array(numInputs);
-        for (var i = 0; i < compInput.length; i++)
+        playerPresses = 0;
+        if (playerTurn == false)
         {
-            compInput[i] = Math.floor(Math.random() * 4);
+            compInput = new Array(numInputs);
+            playerInput = new Array(numInputs);
+            document.getElementById('presses').innerHTML = "Presses: " + numInputs;
+            document.getElementById('turn').innerHTML = "<h3>Turn: Computer</h3>" ;
+            for (var i = 0; i < compInput.length; i++)
+            {
+                compInput[i] = Math.floor(Math.random() * 4);
+            }
+        
+            for (var j = 0; j < compInput.length; j++)
+            {
+                console.log(compInput[j]);
+                setTimeout(colorHandler, gameSpeed * j, compInput[j]);
+            }
+            setTimeout(function(){
+                playerTurn = true;
+                document.getElementById('turn').innerHTML = "<h3>Turn: Player</h3>";
+                game();
+            }, gameSpeed * numInputs + 250);
         }
-    
-        for (var j = 0; j < compInput.length; j++)
-        {
-            console.log(compInput[j]);
-            setTimeout(clickColor, gameSpeed * j, compInput[j]);
-        }
-        setTimeout(function(){
-            playerTurn = true;
-            console.log(playerTurn);
-            game();
-        }, gameSpeed * numInputs + 250);
     }
 }
 
-function clickColor(color){
+// Checks which color is being pressed
+function colorHandler(color){
     if (gameStart == true)
     {    
         if (color === 0) 
@@ -75,7 +89,7 @@ function clickColor(color){
             {
                 playerInput[playerPresses] = 0;
                 playerPresses++;
-                console.log("Presses: " + (numInputs - playerPresses));
+                document.getElementById('presses').innerHTML = "Presses: " + (numInputs - playerPresses);
             }
         }
         else if (color === 1)
@@ -86,7 +100,7 @@ function clickColor(color){
             {
                 playerInput[playerPresses] = 1;
                 playerPresses++;
-                console.log("Presses: " + (numInputs - playerPresses));
+                document.getElementById('presses').innerHTML = "Presses: " + (numInputs - playerPresses);
             }
         } 
         else if (color === 2) {
@@ -96,7 +110,7 @@ function clickColor(color){
             {
                 playerInput[playerPresses] = 2;
                 playerPresses++;
-                console.log("Presses: " + (numInputs - playerPresses));
+                document.getElementById('presses').innerHTML = "Presses: " + (numInputs - playerPresses);
             }
         }
         else 
@@ -107,7 +121,7 @@ function clickColor(color){
             {
                 playerInput[playerPresses] = 3;
                 playerPresses++;
-                console.log("Presses: " + (numInputs - playerPresses));
+                document.getElementById('presses').innerHTML = "Presses: " + (numInputs - playerPresses);
             } 
         }
         setTimeout(originalColor, 500, color);
@@ -116,34 +130,44 @@ function clickColor(color){
     
 }
 
+// Checks if input matches and modifies state of game
 function check(){
     if (playerTurn == true)
     {
-        console.log(playerInput);
-        console.log(compInput);
         if (playerInput[playerPresses - 1] != compInput[playerPresses - 1])
         {
             lives--;
-            console.log("Lives: " + lives);
+            document.getElementById('lives').innerHTML = "Lives: " + lives;
+            streakNum = 0;
+            scoreStreak();
+            document.getElementById('streak').innerHTML = "<h3>Streak: " + streakNum + "</h3>";
+            playerTurn = false;
+            setTimeout(game, 1500);
             if (lives == 0)
             {
-                reset();
+                resetGameConditions();
+                resetInformation();
                 alert("You have lost");
             }
         }
         if (playerPresses == numInputs)
         {
-            score++;
-            console.log("Score: " + score);
+            score+= Math.floor(100 * scoreMultiplier);
+            document.getElementById('score').innerHTML = "Score: " + score;
             level++;
-            console.log("Level: " + level);
+            document.getElementById('level').innerHTML = "Level: " + level;
+            streakNum++;
             playerTurn = false;
             playerPresses = 0;
+            levelConditionsAdjust();
+            scoreStreak();
+            document.getElementById('streak').innerHTML = "<h3>Streak: " + streakNum + "</h3>";
             setTimeout(game, 1500);
         } 
     }
 }
 
+// Handles putting original state of color back
 function originalColor(color){
     if (color == 0) document.getElementById('triangle-up').style.opacity = 1;
     else if (color == 1) document.getElementById('triangle-right').style.opacity = 1;
@@ -151,12 +175,70 @@ function originalColor(color){
     else document.getElementById('triangle-down').style.opacity = 1;
 }
 
-function reset(){
-    gameStart =  false;
+// Adjusts game speed based on level
+function levelConditionsAdjust(){
+    if (level >= 10 && level < 20)
+    {
+        gameSpeed = Math.floor(gameSpeed * 0.945);
+        numInputs = 5;
+    }
+    else if (level >= 20 && level < 30)
+    {
+        gameSpeed = Math.floor(gameSpeed * 0.945);
+        numInputs = 6;
+    } 
+    else if (level >= 30 && level < 40)
+    {
+        gameSpeed = Math.floor(gameSpeed * 0.945);
+        numInputs = 7;
+    } 
+    else if (level >= 40 && level < 50)
+    {
+        gameSpeed = Math.floor(gameSpeed * 0.945);
+        numInputs = 8;
+    } 
+    else if (level == 50)
+    {
+        alert("You have won! Congratulations!");
+        resetGameConditions();
+        resetInformation();
+    }
+}
+
+// Adjusts score if streak
+function scoreStreak(){
+    if (streakNum >= 3) onStreak = true;
+    else onStreak = false;
+
+    if (onStreak)
+    {
+        if (streakNum >= 3 && streakNum < 8) scoreMultiplier = 1.2;
+        else if (streakNum >= 8 && streakNum < 13) scoreMultiplier = 1.35;
+        else scoreMultiplier = 1.5;
+    }
+    else scoreMultiplier = 1.0;
+}
+
+// Resets game conditions to original state
+function resetGameConditions(){
+    gameStart = false;
     playerTurn = false;
     level = 1;
-    lives = 1;
+    lives = 3;
     score = 0;
     numInputs = 4;
-    gameSpeed = 750;
+    gameSpeed = 925;
+    onStreak = false;
+    streakNum = 0;
+    scoreMultiplier = 1.0;
+}
+
+// Resets information to original state
+function resetInformation(){
+    document.getElementById('score').innerHTML = "Score: " + score;
+    document.getElementById('turn').innerHTML = "<h3>Turn: </h3>";
+    document.getElementById('lives').innerHTML = "Lives: " + lives;
+    document.getElementById('level').innerHTML = "Level: " + level;
+    document.getElementById('presses').innerHTML = "Presses: " + numInputs;
+    document.getElementById('streak').innerHTML = "<h3>Streak: " + streakNum + "</h3>";
 }
