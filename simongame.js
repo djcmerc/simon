@@ -1,13 +1,9 @@
-var blue = document.getElementById('triangle-up');
-var green = document.getElementById('triangle-right');
-var yellow = document.getElementById('triangle-left');
-var red = document.getElementById('triangle-down');
-var blueSound = document.getElementById('up-sound');
-var redSound = document.getElementById('down-sound');
-var yellowSound = document.getElementById('left-sound');
-var greenSound = document.getElementById('right-sound');
 var startButton = document.getElementById('start-button');
 var resetButton = document.getElementById('reset-button');
+blue = new Button(document.getElementById('triangle-up'), document.getElementById('up-sound'));
+green = new Button(document.getElementById('triangle-right'), document.getElementById('right-sound'));
+yellow = new Button(document.getElementById('triangle-left'), document.getElementById('left-sound'));
+red = new Button(document.getElementById('triangle-down'), document.getElementById('down-sound'));
 var gameStart = false;
 var level = 1;
 var lives = 3;
@@ -38,13 +34,13 @@ resetButton.addEventListener("click", function(){
 });
 
 // Listeners to handle arrows clicks on player turn
-blue.addEventListener("click", function(){
+blue.image.addEventListener("click", function(){
     if (playerTurn)colorHandler(0)});
-green.addEventListener("click", function(){
+green.image.addEventListener("click", function(){
     if (playerTurn) colorHandler(1)});
-yellow.addEventListener("click", function(){
+yellow.image.addEventListener("click", function(){
     if (playerTurn) colorHandler(2)});
-red.addEventListener("click", function(){
+red.image.addEventListener("click", function(){
     if (playerTurn) colorHandler(3)});
 
 // Game logic
@@ -84,7 +80,8 @@ function colorHandler(color){
         if (color === 0) 
         {
             document.getElementById('triangle-up').style.opacity = 0.5;
-            blueSound.play();
+            //blueSound.play();
+            blue.playSound();
             if (playerTurn)
             {
                 playerInput[playerPresses] = 0;
@@ -95,7 +92,7 @@ function colorHandler(color){
         else if (color === 1)
         {
             document.getElementById('triangle-right').style.opacity = 0.5;
-            greenSound.play();
+            green.playSound();
             if (playerTurn) 
             {
                 playerInput[playerPresses] = 1;
@@ -105,7 +102,7 @@ function colorHandler(color){
         } 
         else if (color === 2) {
             document.getElementById('triangle-left').style.opacity = 0.5;
-            yellowSound.play();
+            yellow.playSound();
             if (playerTurn)
             {
                 playerInput[playerPresses] = 2;
@@ -116,7 +113,7 @@ function colorHandler(color){
         else 
         {
             document.getElementById('triangle-down').style.opacity = 0.5;
-            redSound.play();
+            red.playSound();
             if (playerTurn)
             {
                 playerInput[playerPresses] = 3;
